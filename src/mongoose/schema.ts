@@ -74,7 +74,8 @@ const PackageSchema = new Schema({
     },
   },
   deliveries: [{ type: String, ref: 'Delivery' }],
-  tracker_id: [{ type: String, ref: 'User' }],
+  from_user: [{ type: String, ref: 'User' }],
+  to_user: [{ type: String, ref: 'User' }],
 });
 
 export const Package = mongoose.model('Package', PackageSchema);
@@ -88,7 +89,6 @@ const DeliverySchema = new Schema({
   createdAt: { type: Date, default: Date.now, required: true },
   updatedAt: { type: Date, default: Date.now, required: true },
 
-  package_id: { type: String, default: uuid, required: true },
   pickup_time: { type: Date },
   start_time: { type: Date },
   end_time: { type: Date },
@@ -103,7 +103,7 @@ const DeliverySchema = new Schema({
     enum: ['open', 'picked-up', 'in-transit', 'delivered', 'failed'],
     default: 'open',
   },
-  package: { type: String, ref: 'Package', required: true },
+  package_id: { type: String, default: uuid, required: true },
   driver_id: { type: String, ref: 'User', required: true },
 });
 
