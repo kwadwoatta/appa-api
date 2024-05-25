@@ -1,0 +1,10 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - '${MONGO_PORT}:${MONGO_PORT}'
+    env_file:
+      - .env
+    volumes:
+      - .env:/.env
