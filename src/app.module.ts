@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 
+import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
+import { RoleGuard } from 'common';
+import { JwtGuard } from './auth/guard';
 import { PackageModule } from './package/package.module';
 import { UserModule } from './user/user.module';
 
@@ -15,6 +18,16 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
     PackageModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
   ],
 })
 export class AppModule {}

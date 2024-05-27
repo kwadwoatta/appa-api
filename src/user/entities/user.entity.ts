@@ -1,15 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Role } from 'common';
 import mongoose, { Document } from 'mongoose';
 import { Package } from 'src/package';
 import { v4 as uuid } from 'uuid';
 
 export type UserDocument = User & Document;
-
-export enum Role {
-  Admin = 'admin',
-  Customer = 'customer',
-  Driver = 'driver',
-}
 
 @Schema({ _id: false })
 export class User {
