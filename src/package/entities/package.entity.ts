@@ -10,6 +10,7 @@ import {
 import { Point } from 'common';
 import mongoose, { Document } from 'mongoose';
 import type { Delivery } from 'src/delivery';
+
 import type { User } from 'src/user';
 import { v4 as uuid } from 'uuid';
 
