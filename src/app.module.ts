@@ -9,6 +9,7 @@ import { JwtGuard } from './auth/guard';
 import { PackageModule } from './package/package.module';
 import { UserModule } from './user/user.module';
 import { DeliveryModule } from './delivery/delivery.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DeliveryModule } from './delivery/delivery.module';
     UserModule,
     PackageModule,
     DeliveryModule,
+    EventsModule,
   ],
   providers: [
     {
