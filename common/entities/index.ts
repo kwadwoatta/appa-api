@@ -16,7 +16,7 @@ export class Point {
   @IsNumber({}, { each: true })
   @Prop({
     coordinates: {
-      type: [Number],
+      type: [Number], // long, lat https://www.rfc-editor.org/rfc/rfc7946#section-3.1.1
       required: true,
     },
   })

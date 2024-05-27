@@ -16,7 +16,13 @@ export class DeliveryService {
   }
 
   findAll() {
-    return this.deliveryModel.find().populate(['from_user', 'to_user']).exec();
+    return this.deliveryModel
+      .find()
+      .populate([
+        { path: 'package', select: '-sensitiveField1 -sensitiveField2' },
+        { path: 'driver', select: '-sensitiveField1 -sensitiveField2' },
+      ])
+      .exec();
   }
 
   findOne(deliveryId: string) {
@@ -24,14 +30,14 @@ export class DeliveryService {
       .findOne({
         _id: deliveryId,
       })
-      .populate(['from_user', 'to_user'])
+      .populate(['package', 'driver'])
       .exec();
   }
 
   async findAllForUser(userId: string) {
     return this.deliveryModel
       .find({
-        $or: [{ from_user: userId }, { to_user: userId }],
+        driver: userId,
       })
       .exec();
   }
@@ -39,12 +45,34 @@ export class DeliveryService {
   async findOneForUser(userId: string, deliveryId: string) {
     return this.deliveryModel
       .findOne({
+        driver: userId,
         _id: deliveryId,
-        $or: [{ from_user: userId }, { to_user: userId }],
       })
-      .populate(['from_user', 'to_user'])
+      .populate(['package', 'driver'])
       .exec();
   }
+
+  async findAllForUserPackage(userId: string, pkgId: string) {
+    return this.deliveryModel
+      .find({
+        $or: [{ driver: userId }, { package: pkgId }],
+      })
+      .exec();
+  }
+
+  // async findOneForUserPackage(
+  //   userId: string,
+  //   pkgId: string,
+  //   deliveryId: string,
+  // ) {
+  //   return this.deliveryModel
+  //     .findOne({
+  //       _id: deliveryId,
+  //       $or: [{}, {}],
+  //     })
+  //     .populate([])
+  //     .exec();
+  // }
 
   update(deliveryId: string, dto: UpdateDeliveryDto) {
     return this.deliveryModel.findByIdAndUpdate(deliveryId, { ...dto }).exec();

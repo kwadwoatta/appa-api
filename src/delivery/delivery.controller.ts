@@ -34,9 +34,9 @@ export class DeliveryController {
   }
 
   @AllowedRoles(Role.Admin)
-  @Get('delivery:id')
-  findOne(@Param('id') id: string) {
-    return this.deliveryService.findOne(id);
+  @Get('delivery:deliveryId')
+  findOne(@Param('deliveryId') deliveryId: string) {
+    return this.deliveryService.findOne(deliveryId);
   }
 
   @Get('users/me/delivery')
@@ -44,23 +44,44 @@ export class DeliveryController {
     return this.deliveryService.findAllForUser(user._id);
   }
 
-  @Get('users/me/delivery/:id')
-  findOneForUser(@GetUser() user: User, @Param('id') id: string) {
-    return this.deliveryService.findOneForUser(user._id, id);
+  @Get('users/me/delivery/:deliveryId')
+  findOneForUser(
+    @GetUser() user: User,
+    @Param('deliveryId') deliveryId: string,
+  ) {
+    return this.deliveryService.findOneForUser(user._id, deliveryId);
   }
 
+  @Get('users/me/package/:pkgId/delivery')
+  findAllForUserPackage(@GetUser() user: User, @Param('pkgId') pkgId: string) {
+    return this.deliveryService.findAllForUserPackage(user._id, pkgId);
+  }
+
+  // @Get('users/me/package/:pkgId/delivery/:deliveryId')
+  // findOneForUserPackage(
+  //   @GetUser() user: User,
+  //   @Param('deliveryId') deliveryId: string,
+  //   @Param('pkgId') pkgId: string,
+  // ) {
+  //   return this.deliveryService.findOneForUserPackage(
+  //     user._id,
+  //     pkgId,
+  //     deliveryId,
+  //   );
+  // }
+
   @AllowedRoles(Role.Admin)
-  @Patch('delivery:id')
+  @Patch('delivery:deliveryId')
   update(
-    @Param('id') id: string,
+    @Param('deliveryId') deliveryId: string,
     @Body() updateDeliveryDto: UpdateDeliveryDto,
   ) {
-    return this.deliveryService.update(id, updateDeliveryDto);
+    return this.deliveryService.update(deliveryId, updateDeliveryDto);
   }
 
   @AllowedRoles(Role.Admin)
-  @Delete('delivery:id')
-  remove(@Param('id') id: string) {
-    return this.deliveryService.remove(id);
+  @Delete('delivery:deliveryId')
+  remove(@Param('deliveryId') deliveryId: string) {
+    return this.deliveryService.remove(deliveryId);
   }
 }

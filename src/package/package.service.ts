@@ -17,7 +17,13 @@ export class PackageService {
   }
 
   findAll() {
-    return this.packageModel.find().populate(['from_user', 'to_user']).exec();
+    return this.packageModel
+      .find()
+      .populate([
+        { path: 'from_user', select: '-hash -role -createdAt -updatedAt' },
+        { path: 'to_user', select: '-hash -role -createdAt -updatedAt' },
+      ])
+      .exec();
   }
 
   findOne(packageId: string) {
@@ -25,7 +31,10 @@ export class PackageService {
       .findOne({
         _id: packageId,
       })
-      .populate(['from_user', 'to_user'])
+      .populate([
+        { path: 'from_user', select: '-hash -role -createdAt -updatedAt' },
+        { path: 'to_user', select: '-hash -role -createdAt -updatedAt' },
+      ])
       .exec();
   }
 
@@ -43,7 +52,10 @@ export class PackageService {
         _id: packageId,
         $or: [{ from_user: userId }, { to_user: userId }],
       })
-      .populate(['from_user', 'to_user'])
+      .populate([
+        { path: 'from_user', select: '-hash -role -createdAt -updatedAt' },
+        { path: 'to_user', select: '-hash -role -createdAt -updatedAt' },
+      ])
       .exec();
   }
 
