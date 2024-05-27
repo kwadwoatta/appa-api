@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AllowRole, Role } from 'common';
+import { AllowedRoles, Role } from 'common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { User } from 'src/user';
@@ -21,19 +21,19 @@ import { PackageService } from './package.service';
 export class PackageController {
   constructor(private readonly packageService: PackageService) {}
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Post('package')
   create(@Body() createPackageDto: CreatePackageDto) {
     return this.packageService.create(createPackageDto);
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Get('package')
   findAll() {
     return this.packageService.findAll();
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Get('package:id')
   findOne(@Param('id') id: string) {
     return this.packageService.findOne(id);
@@ -49,13 +49,13 @@ export class PackageController {
     return this.packageService.findOneForUser(user._id, id);
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Patch('package:id')
   update(@Param('id') id: string, @Body() updatePackageDto: UpdatePackageDto) {
     return this.packageService.update(id, updatePackageDto);
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Delete('package:id')
   remove(@Param('id') id: string) {
     return this.packageService.remove(id);

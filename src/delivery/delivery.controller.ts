@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AllowRole, Role } from 'common';
+import { AllowedRoles, Role } from 'common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { User } from 'src/user';
@@ -21,19 +21,19 @@ import { UpdateDeliveryDto } from './dto/update-delivery.dto';
 export class DeliveryController {
   constructor(private readonly deliveryService: DeliveryService) {}
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Post('delivery')
   create(@Body() createDeliveryDto: CreateDeliveryDto) {
     return this.deliveryService.create(createDeliveryDto);
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Get('delivery')
   findAll() {
     return this.deliveryService.findAll();
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Get('delivery:id')
   findOne(@Param('id') id: string) {
     return this.deliveryService.findOne(id);
@@ -49,7 +49,7 @@ export class DeliveryController {
     return this.deliveryService.findOneForUser(user._id, id);
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Patch('delivery:id')
   update(
     @Param('id') id: string,
@@ -58,7 +58,7 @@ export class DeliveryController {
     return this.deliveryService.update(id, updateDeliveryDto);
   }
 
-  @AllowRole(Role.Admin)
+  @AllowedRoles(Role.Admin)
   @Delete('delivery:id')
   remove(@Param('id') id: string) {
     return this.deliveryService.remove(id);
