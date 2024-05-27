@@ -34,7 +34,7 @@ export class DeliveryController {
   }
 
   @AllowedRoles(Role.Admin)
-  @Get('delivery:deliveryId')
+  @Get('delivery/:deliveryId')
   findOne(@Param('deliveryId') deliveryId: string) {
     return this.deliveryService.findOne(deliveryId);
   }
@@ -71,7 +71,7 @@ export class DeliveryController {
   // }
 
   @AllowedRoles(Role.Admin)
-  @Patch('delivery:deliveryId')
+  @Patch('delivery/:deliveryId')
   update(
     @Param('deliveryId') deliveryId: string,
     @Body() updateDeliveryDto: UpdateDeliveryDto,
@@ -80,7 +80,7 @@ export class DeliveryController {
   }
 
   @AllowedRoles(Role.Admin)
-  @Delete('delivery:deliveryId')
+  @Delete('delivery/:deliveryId')
   remove(@Param('deliveryId') deliveryId: string) {
     return this.deliveryService.remove(deliveryId);
   }

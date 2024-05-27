@@ -61,9 +61,9 @@ export class Package {
   @Prop({ type: Number, required: true })
   depth: number;
 
-  @IsString()
-  @Prop({ type: String, required: true })
-  from_name: string;
+  // @IsString()
+  // @Prop({ type: String, required: true })
+  // from_name: string;
 
   @IsString()
   @Prop({ type: String, required: true })
@@ -74,9 +74,9 @@ export class Package {
   @Prop(Point)
   from_location: Point;
 
-  @IsString()
-  @Prop({ type: String, required: true })
-  to_name: string;
+  // @IsString()
+  // @Prop({ type: String, required: true })
+  // to_name: string;
 
   @IsString()
   @Prop({ type: String, required: true })

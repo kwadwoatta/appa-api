@@ -34,7 +34,7 @@ export class PackageController {
   }
 
   @AllowedRoles(Role.Admin)
-  @Get('package:id')
+  @Get('package/:id')
   findOne(@Param('id') id: string) {
     return this.packageService.findOne(id);
   }
@@ -50,13 +50,13 @@ export class PackageController {
   }
 
   @AllowedRoles(Role.Admin)
-  @Patch('package:id')
+  @Patch('package/:id')
   update(@Param('id') id: string, @Body() updatePackageDto: UpdatePackageDto) {
     return this.packageService.update(id, updatePackageDto);
   }
 
   @AllowedRoles(Role.Admin)
-  @Delete('package:id')
+  @Delete('package/:id')
   remove(@Param('id') id: string) {
     return this.packageService.remove(id);
   }

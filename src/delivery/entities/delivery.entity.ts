@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsUUID } from 'class-validator';
 import { DeliveryStatus, Point } from 'common';
 import type { Document } from 'mongoose';
 import mongoose from 'mongoose';
@@ -20,16 +21,16 @@ export class Delivery {
   updatedAt: Date;
 
   @Prop({ type: Date })
-  pickup_time: Date;
+  pickup_time?: Date;
 
   @Prop({ type: Date })
-  start_time: Date;
+  start_time?: Date;
 
   @Prop({ type: Date })
-  end_time: Date;
+  end_time?: Date;
 
-  @Prop({ required: true, type: Point })
-  location: Point;
+  @Prop({ type: Point })
+  location?: Point;
 
   @Prop({
     default: DeliveryStatus.Open,
@@ -44,12 +45,11 @@ export class Delivery {
   })
   status: DeliveryStatus;
 
-  @Prop({ type: String, ref: 'Package', required: true })
-  package_id: string;
-
+  @IsUUID()
   @Prop({ type: String, ref: 'Package', required: true })
   package: Package;
 
+  @IsUUID()
   @Prop({ type: String, ref: 'User', required: true })
   driver: User;
 }

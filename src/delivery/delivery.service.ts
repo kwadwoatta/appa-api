@@ -19,8 +19,11 @@ export class DeliveryService {
     return this.deliveryModel
       .find()
       .populate([
-        { path: 'package', select: '-sensitiveField1 -sensitiveField2' },
-        { path: 'driver', select: '-sensitiveField1 -sensitiveField2' },
+        { path: 'package', select: '' },
+        {
+          path: 'driver',
+          select: '-hash -role -createdAt -updatedAt',
+        },
       ])
       .exec();
   }
@@ -30,7 +33,13 @@ export class DeliveryService {
       .findOne({
         _id: deliveryId,
       })
-      .populate(['package', 'driver'])
+      .populate([
+        { path: 'package', select: '' },
+        {
+          path: 'driver',
+          select: '-hash -role -createdAt -updatedAt',
+        },
+      ])
       .exec();
   }
 
@@ -48,7 +57,13 @@ export class DeliveryService {
         driver: userId,
         _id: deliveryId,
       })
-      .populate(['package', 'driver'])
+      .populate([
+        { path: 'package', select: '' },
+        {
+          path: 'driver',
+          select: '-hash -role -createdAt -updatedAt',
+        },
+      ])
       .exec();
   }
 

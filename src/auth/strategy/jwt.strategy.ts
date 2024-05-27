@@ -9,7 +9,6 @@ import { User, UserModel } from 'src/user';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     config: ConfigService,
-    // @Inject(UserModelProvider) private readonly userModel: typeof UserModel,
     @InjectModel(User.name) private readonly userModel: typeof UserModel,
   ) {
     super({

@@ -20,8 +20,8 @@ export class PackageService {
     return this.packageModel
       .find()
       .populate([
-        { path: 'from_user', select: '-hash -role -createdAt -updatedAt' },
-        { path: 'to_user', select: '-hash -role -createdAt -updatedAt' },
+        { path: 'from_user', select: '-hash -createdAt -updatedAt' },
+        { path: 'to_user', select: '-hash -createdAt -updatedAt' },
       ])
       .exec();
   }
@@ -32,8 +32,8 @@ export class PackageService {
         _id: packageId,
       })
       .populate([
-        { path: 'from_user', select: '-hash -role -createdAt -updatedAt' },
-        { path: 'to_user', select: '-hash -role -createdAt -updatedAt' },
+        { path: 'from_user', select: '-hash -createdAt -updatedAt' },
+        { path: 'to_user', select: '-hash -createdAt -updatedAt' },
       ])
       .exec();
   }
@@ -43,6 +43,16 @@ export class PackageService {
       .find({
         $or: [{ from_user: userId }, { to_user: userId }],
       })
+      .populate([
+        {
+          path: 'from_user',
+          select: '-hash -role -createdAt -updatedAt',
+        },
+        {
+          path: 'to_user',
+          select: '-hash -role -packages -createdAt -updatedAt',
+        },
+      ])
       .exec();
   }
 
@@ -53,8 +63,14 @@ export class PackageService {
         $or: [{ from_user: userId }, { to_user: userId }],
       })
       .populate([
-        { path: 'from_user', select: '-hash -role -createdAt -updatedAt' },
-        { path: 'to_user', select: '-hash -role -createdAt -updatedAt' },
+        {
+          path: 'from_user',
+          select: '-hash -role -createdAt -updatedAt',
+        },
+        {
+          path: 'to_user',
+          select: '-hash -role -packages -createdAt -updatedAt',
+        },
       ])
       .exec();
   }
