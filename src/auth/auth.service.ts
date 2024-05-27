@@ -1,7 +1,6 @@
 import {
   ConflictException,
   ForbiddenException,
-  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,14 +8,14 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 
-import { User } from 'src/mongoose';
-import { UserModelProvider } from 'src/user/user.provider';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserModel } from 'src/user';
 import { AuthDto } from './dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(UserModelProvider) private readonly userModel: typeof User,
+    @InjectModel(User.name) private readonly userModel: typeof UserModel,
     private jwt: JwtService,
     private config: ConfigService,
   ) {}

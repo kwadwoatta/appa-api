@@ -1,19 +1,19 @@
 import * as argon from 'argon2';
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import { User } from 'src/mongoose';
+import { UserModel } from 'src/user';
 
 async function main() {
   try {
     await mongoose.connect(process.env.DB_URL);
 
     const hash = await argon.hash('password');
-    await User.init();
+    // await UserModel.init();
 
-    await User.create([
+    await UserModel.create([
       {
-        email: 'tracker@gmail.com',
-        role: 'tracker',
+        email: 'customer@gmail.com',
+        role: 'customer',
         hash,
         firstName: 'Prince',
         lastName: 'Ofori',

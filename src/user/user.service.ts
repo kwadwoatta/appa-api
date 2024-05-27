@@ -1,11 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { EditUserDto } from './dto';
-import { User } from './entities';
-import { UserModelProvider } from './user.provider';
+import { User, UserModel } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject(UserModelProvider) private readonly userModel: User) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: typeof UserModel,
+  ) {}
 
   async editUser(userId: string, dto: EditUserDto) {
     const user = await this.userModel
