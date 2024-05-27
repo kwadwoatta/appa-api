@@ -5,8 +5,7 @@ import { Socket } from 'socket.io';
 @Catch(WsException, HttpException)
 export class WebsocketExceptionsFilter extends BaseWsExceptionFilter {
   catch(exception: WsException | HttpException, host: ArgumentsHost) {
-    const client = host.switchToWs().getClient() as Socket;
-    // const data = host.switchToWs().getData();
+    const socket = host.switchToWs().getClient() as Socket;
     const pattern = host.switchToWs().getPattern();
 
     const error =
@@ -16,13 +15,10 @@ export class WebsocketExceptionsFilter extends BaseWsExceptionFilter {
 
     const details = error instanceof Object ? { ...error } : { message: error };
 
-    client.emit(
+    socket.emit(
       pattern,
       JSON.stringify({
-        event: 'error',
-        data: {
-          ...details,
-        },
+        ...details,
       }),
     );
   }

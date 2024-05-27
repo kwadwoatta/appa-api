@@ -1,86 +1,59 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { DeliveryStatus, WsEvents } from 'common';
-import { EventEmitter } from 'events';
 import { Server } from 'socket.io';
 import { Delivery, DeliveryModel } from 'src/delivery';
+import { LocationChangedEventDto } from './dto/location-changed.dto';
 import { StatusChangedEventDto } from './dto/status-changed.dto';
-import { DeliveryUpdatedEvent } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {
-  private eventEmitter: EventEmitter;
-
   constructor(
     @InjectModel(Delivery.name)
     private readonly deliveryModel: typeof DeliveryModel,
-  ) {
-    this.eventEmitter = new EventEmitter();
-  }
+  ) {}
 
-  locationChanged(dto: any) {
-    console.log({ dto });
-
-    return 'hi';
-
-    return this.deliveryModel
+  async locationChanged(dto: LocationChangedEventDto, server: Server) {
+    const update = await this.deliveryModel
       .findByIdAndUpdate(
         dto.delivery_id,
         { location: dto.location },
         { new: true },
       )
       .exec();
+
+    server.emit(WsEvents.DeliveryUpdated, update.toJSON());
   }
 
-  async statusChanged(dto: StatusChangedEventDto) {
-    console.log({ dto });
+  async statusChanged(dto: StatusChangedEventDto, server: Server) {
+    const statusUpdates = {
+      [DeliveryStatus.PickedUp]: {
+        status: DeliveryStatus.PickedUp,
+        pickup_time: new Date(),
+      },
+      [DeliveryStatus.InTransit]: {
+        status: DeliveryStatus.InTransit,
+        start_time: new Date(),
+      },
+      [DeliveryStatus.Delivered]: {
+        status: DeliveryStatus.Delivered,
+        end_time: new Date(),
+      },
+      [DeliveryStatus.Failed]: {
+        status: DeliveryStatus.Failed,
+        end_time: new Date(),
+      },
+    };
 
-    switch (dto.status) {
-      case DeliveryStatus.PickedUp: {
-        const update = await this.deliveryModel
-          .findByIdAndUpdate(
-            dto.delivery_id,
-            { pickup_time: Date.now() },
-            { new: true },
-          )
-          .exec();
+    if (statusUpdates.hasOwnProperty(dto.status)) {
+      console.log(dto.status);
+      const update = await this.deliveryModel
+        .findByIdAndUpdate(dto.delivery_id, statusUpdates[dto.status], {
+          new: true,
+        })
+        .exec();
 
-        this.eventEmitter.emit('deliveryUpdated', update);
-      }
-
-      case DeliveryStatus.InTransit: {
-        const update = await this.deliveryModel
-          .findByIdAndUpdate(
-            dto.delivery_id,
-            { start_time: Date.now() },
-            { new: true },
-          )
-          .exec();
-
-        this.eventEmitter.emit('deliveryUpdated', update);
-      }
-
-      case DeliveryStatus.Failed:
-      case DeliveryStatus.Delivered: {
-        const update = await this.deliveryModel
-          .findByIdAndUpdate(
-            dto.delivery_id,
-            { end_time: Date.now() },
-            { new: true },
-          )
-          .exec();
-
-        this.eventEmitter.emit('deliveryUpdated', update);
-      }
-
-      case DeliveryStatus.Open: {
-      }
+      server.emit(WsEvents.DeliveryUpdated, update.toJSON());
     }
-  }
-
-  deliveryUpdated(server: Server) {
-    this.eventEmitter.on('deliveryUpdated', (update) => {
-      server.emit(WsEvents.DeliveryUpdated, update as DeliveryUpdatedEvent);
-    });
   }
 }
