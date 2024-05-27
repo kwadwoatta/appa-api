@@ -5,6 +5,12 @@ import { v4 as uuid } from 'uuid';
 
 export type UserDocument = User & Document;
 
+export enum Role {
+  Admin = 'admin',
+  Customer = 'customer',
+  Driver = 'driver',
+}
+
 @Schema({ _id: false })
 export class User {
   @Prop({ type: String, default: uuid })
@@ -31,8 +37,8 @@ export class User {
   @Prop({ type: String })
   lastName: string;
 
-  @Prop({ type: String, enum: ['driver', 'customer', 'admin'] })
-  role: string;
+  @Prop({ type: String, enum: [Role.Admin, Role.Customer, Role.Driver] })
+  role: Role;
 
   @Prop([{ type: String, ref: 'Package' }])
   packages: Package[];
