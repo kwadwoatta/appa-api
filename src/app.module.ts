@@ -8,6 +8,7 @@ import { RoleGuard } from 'common';
 import { JwtGuard } from './auth/guard';
 import { PackageModule } from './package/package.module';
 import { UserModule } from './user/user.module';
+import { DeliveryModule } from './delivery/delivery.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
     PackageModule,
+    DeliveryModule,
   ],
   providers: [
     {

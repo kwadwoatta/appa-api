@@ -7,33 +7,13 @@ import {
   IsUUID,
   ValidateNested,
 } from 'class-validator';
+import { Point } from 'common';
 import mongoose, { Document } from 'mongoose';
-import { User } from 'src/user';
+import type { Delivery } from 'src/delivery';
+import type { User } from 'src/user';
 import { v4 as uuid } from 'uuid';
 
 export type PackageDocument = Package & Document;
-
-export class Point {
-  @IsString()
-  @Prop({
-    type: {
-      type: String,
-      enum: ['Point'],
-      default: 'Point',
-      required: true,
-    },
-  })
-  type: string;
-
-  @IsNumber({}, { each: true })
-  @Prop({
-    coordinates: {
-      type: [Number],
-      required: true,
-    },
-  })
-  coordinates: number[];
-}
 
 @Schema({ _id: false })
 export class Package {
@@ -50,10 +30,15 @@ export class Package {
   @Prop({ type: Date, default: Date.now, required: true })
   updatedAt: Date;
 
-  // @IsOptional()
-  // @IsUUID()
-  // @Prop({ type: String, ref: 'Delivery' })
-  // active_delivery_id?: string;
+  @IsOptional()
+  @IsUUID()
+  @Prop({ type: String, ref: 'Delivery' })
+  active_delivery_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @Prop({ type: String, ref: 'Delivery' })
+  active_delivery?: Delivery;
 
   @IsString()
   @Prop({ type: String, required: true })
@@ -101,16 +86,16 @@ export class Package {
   @Prop(Point)
   to_location: Point;
 
-  // @IsUUID('4', { each: true })
-  // @Prop([{ type: String, ref: 'Delivery', default: [] }])
-  // deliveries: string[];
+  @IsUUID('4', { each: true })
+  @Prop([{ type: String, ref: 'Delivery', default: [] }])
+  deliveries: Delivery[];
 
   @IsUUID()
-  @Prop({ type: String, ref: User.name, required: true })
+  @Prop({ type: String, ref: 'User', required: true })
   from_user: User;
 
   @IsUUID()
-  @Prop({ type: String, ref: User.name, required: true })
+  @Prop({ type: String, ref: 'User', required: true })
   to_user: User;
 }
 

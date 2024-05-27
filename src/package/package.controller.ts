@@ -8,9 +8,8 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { GetUser } from 'src/auth/decorator';
-
 import { AllowRole, Role } from 'common';
+import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { User } from 'src/user';
 import { CreatePackageDto } from './dto/create-package.dto';
@@ -27,11 +26,13 @@ export class PackageController {
   create(@Body() createPackageDto: CreatePackageDto) {
     return this.packageService.create(createPackageDto);
   }
+
   @AllowRole(Role.Admin)
   @Get('package')
   findAll() {
     return this.packageService.findAll();
   }
+
   @AllowRole(Role.Admin)
   @Get('package:id')
   findOne(@Param('id') id: string) {
@@ -47,11 +48,13 @@ export class PackageController {
   findOneForUser(@GetUser() user: User, @Param('id') id: string) {
     return this.packageService.findOneForUser(user._id, id);
   }
+
   @AllowRole(Role.Admin)
   @Patch('package:id')
   update(@Param('id') id: string, @Body() updatePackageDto: UpdatePackageDto) {
     return this.packageService.update(id, updatePackageDto);
   }
+
   @AllowRole(Role.Admin)
   @Delete('package:id')
   remove(@Param('id') id: string) {
