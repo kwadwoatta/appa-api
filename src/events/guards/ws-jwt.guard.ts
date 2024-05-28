@@ -33,6 +33,8 @@ export class WsJwtGuard implements CanActivate {
     if (!user) throw new UnauthorizedException();
 
     delete user.hash;
-    return user;
+    client = Object.assign(client, {
+      user: user,
+    });
   }
 }

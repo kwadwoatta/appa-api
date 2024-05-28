@@ -4,6 +4,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import {
   MessageBody,
   OnGatewayInit,
@@ -13,6 +14,7 @@ import {
 } from '@nestjs/websockets';
 import { WebsocketExceptionsFilter, WsEvents } from 'common';
 import { Server, Socket } from 'socket.io';
+import { User, UserModel } from 'src/user';
 import { LocationChangedEventDto } from './dto/location-changed.dto';
 import { StatusChangedEventDto } from './dto/status-changed.dto';
 import { EventsService } from './events.service';
@@ -27,12 +29,15 @@ export class EventsGateway implements OnGatewayInit {
   @WebSocketServer()
   server: Server;
 
-  afterInit(client: Socket) {
-    console.log('after init');
-    client.use(WsAuthMiddleware() as any);
-  }
+  constructor(
+    private readonly eventsService: EventsService,
+    @InjectModel(User.name)
+    private readonly userModel: typeof UserModel,
+  ) {}
 
-  constructor(private readonly eventsService: EventsService) {}
+  afterInit(client: Socket) {
+    client.use(WsAuthMiddleware(this.userModel) as any);
+  }
 
   @SubscribeMessage(WsEvents.LocationChanged)
   locationChanged(@MessageBody() dto: LocationChangedEventDto) {
@@ -56,4 +61,14 @@ export class EventsGateway implements OnGatewayInit {
   handleMessage(@MessageBody() message: string): void {
     this.server.emit('message', message);
   }
+
+  // createDeliveryRoom(
+  //   socket: Socket,
+  //   roomId: string,
+  //   data: string,
+  // ): WsResponse<unknown> {
+  //   socket.join(roomId);
+  //   socket.to('aRoom').emit('roomCreated', { room: 'aRoom' });
+  //   return { event: 'roomCreated', room: 'aRoom' };
+  // }
 }
