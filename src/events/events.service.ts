@@ -56,4 +56,6 @@ export class EventsService {
       server.emit(WsEvents.DeliveryUpdated, update.toJSON());
     }
   }
+
+  async startRoomForDeliveryComm() {}
 }

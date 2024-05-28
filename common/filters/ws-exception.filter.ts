@@ -15,11 +15,6 @@ export class WebsocketExceptionsFilter extends BaseWsExceptionFilter {
 
     const details = error instanceof Object ? { ...error } : { message: error };
 
-    socket.emit(
-      pattern,
-      JSON.stringify({
-        ...details,
-      }),
-    );
+    socket.emit(pattern, JSON.parse(JSON.stringify(details)));
   }
 }

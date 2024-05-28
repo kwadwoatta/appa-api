@@ -5,11 +5,10 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RoleGuard } from 'common';
-import { JwtGuard } from './auth/guard';
-import { PackageModule } from './package/package.module';
-import { UserModule } from './user/user.module';
 import { DeliveryModule } from './delivery/delivery.module';
 import { EventsModule } from './events/events.module';
+import { PackageModule } from './package/package.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -24,10 +23,10 @@ import { EventsModule } from './events/events.module';
     EventsModule,
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: JwtGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtGuard,
+    // },
     {
       provide: APP_GUARD,
       useClass: RoleGuard,

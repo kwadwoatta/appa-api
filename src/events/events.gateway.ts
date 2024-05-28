@@ -1,22 +1,36 @@
-import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  UseFilters,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   MessageBody,
+  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { WebsocketExceptionsFilter, WsEvents } from 'common';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { LocationChangedEventDto } from './dto/location-changed.dto';
 import { StatusChangedEventDto } from './dto/status-changed.dto';
 import { EventsService } from './events.service';
+import { WsJwtGuard } from './guards';
+import { WsAuthMiddleware } from './middleware/ws.middleware';
 
 @UseFilters(WebsocketExceptionsFilter)
 @UsePipes(new ValidationPipe({ transform: true }))
+@UseGuards(WsJwtGuard)
 @WebSocketGateway({ namespace: 'events' })
-export class EventsGateway {
+export class EventsGateway implements OnGatewayInit {
   @WebSocketServer()
   server: Server;
+
+  afterInit(client: Socket) {
+    console.log('after init');
+    client.use(WsAuthMiddleware() as any);
+  }
 
   constructor(private readonly eventsService: EventsService) {}
 
