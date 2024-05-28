@@ -22,7 +22,7 @@ export class EventsService {
       )
       .exec();
 
-    server.emit(WsEvents.DeliveryUpdated, update.toJSON());
+    server.to(dto.delivery_id).emit(WsEvents.DeliveryUpdated, update.toJSON());
   }
 
   async statusChanged(dto: StatusChangedEventDto, server: Server) {
@@ -46,16 +46,15 @@ export class EventsService {
     };
 
     if (statusUpdates.hasOwnProperty(dto.status)) {
-      console.log(dto.status);
       const update = await this.deliveryModel
         .findByIdAndUpdate(dto.delivery_id, statusUpdates[dto.status], {
           new: true,
         })
         .exec();
 
-      server.emit(WsEvents.DeliveryUpdated, update.toJSON());
+      server
+        .to(dto.delivery_id)
+        .emit(WsEvents.DeliveryUpdated, update.toJSON());
     }
   }
-
-  async startRoomForDeliveryComm() {}
 }

@@ -19,6 +19,8 @@ export class WsJwtGuard implements CanActivate {
 
     const client = context.switchToWs().getClient() as Socket;
     WsJwtGuard.validateToken(client);
+
+    return true;
   }
 
   static async validateToken(client: Socket) {
@@ -32,7 +34,6 @@ export class WsJwtGuard implements CanActivate {
     const user = await UserModel.findOne({ _id: payload.sub }).exec();
     if (!user) throw new UnauthorizedException();
 
-    delete user.hash;
     client = Object.assign(client, {
       user: user,
     });

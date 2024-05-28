@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { EventsGateway } from 'src/events/events.gateway';
 import { CreateDeliveryDto } from './dto/create-delivery.dto';
 import { UpdateDeliveryDto } from './dto/update-delivery.dto';
 import { Delivery, DeliveryModel } from './entities/delivery.entity';
@@ -10,13 +9,13 @@ export class DeliveryService {
   constructor(
     @InjectModel(Delivery.name)
     private readonly deliveryModel: typeof DeliveryModel,
-    private readonly eventsGateway: EventsGateway,
+    // private readonly eventsGateway: EventsGateway,
   ) {}
 
   async create(dto: CreateDeliveryDto) {
     const createdDelivery = await this.deliveryModel.create(dto);
-    this.eventsGateway.server.of('/events').adapter.rooms[createdDelivery.id] =
-      new Set();
+    // this.eventsGateway.server.of('/events').adapter.rooms[createdDelivery.id] =
+    //   new Set();
 
     return createdDelivery;
   }

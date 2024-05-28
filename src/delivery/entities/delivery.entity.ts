@@ -51,6 +51,10 @@ export class Delivery {
 
   @IsUUID()
   @Prop({ type: String, ref: 'User', required: true })
+  customer: User;
+
+  @IsUUID()
+  @Prop({ type: String, ref: 'User', required: true })
   driver: User;
 }
 
