@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventsService } from 'src/events/events.service';
 import { CreateDeliveryDto } from './dto/create-delivery.dto';
 import { UpdateDeliveryDto } from './dto/update-delivery.dto';
 import { Delivery, DeliveryModel } from './entities/delivery.entity';
@@ -9,6 +10,7 @@ export class DeliveryService {
   constructor(
     @InjectModel(Delivery.name)
     private readonly deliveryModel: typeof DeliveryModel,
+    private readonly eventsService: EventsService,
   ) {}
 
   create(dto: CreateDeliveryDto) {
@@ -22,7 +24,7 @@ export class DeliveryService {
         { path: 'package', select: '' },
         {
           path: 'driver',
-          select: '-hash -role -createdAt -updatedAt',
+          select: '-hash -createdAt -updatedAt',
         },
       ])
       .exec();
@@ -37,7 +39,7 @@ export class DeliveryService {
         { path: 'package', select: '' },
         {
           path: 'driver',
-          select: '-hash -role -createdAt -updatedAt',
+          select: '-hash -createdAt -updatedAt',
         },
       ])
       .exec();
@@ -61,7 +63,7 @@ export class DeliveryService {
         { path: 'package', select: '' },
         {
           path: 'driver',
-          select: '-hash -role -createdAt -updatedAt',
+          select: '-hash -createdAt -updatedAt',
         },
       ])
       .exec();
