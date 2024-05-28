@@ -47,8 +47,11 @@ export class EventsGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage(WsEvents.LocationChanged)
-  locationChanged(@MessageBody() dto: LocationChangedEventDto) {
-    return this.eventsService.locationChanged(dto, this.server);
+  locationChanged(
+    @MessageBody() dto: LocationChangedEventDto,
+    @ConnectedSocket() socket,
+  ) {
+    return this.eventsService.locationChanged(dto, this.server, socket);
   }
 
   @SubscribeMessage(WsEvents.StatusChanged)

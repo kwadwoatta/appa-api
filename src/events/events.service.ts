@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { DeliveryStatus, WsEvents } from 'common';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { Delivery, DeliveryModel } from 'src/delivery';
 import { LocationChangedEventDto } from './dto/location-changed.dto';
 import { StatusChangedEventDto } from './dto/status-changed.dto';
@@ -13,10 +13,14 @@ export class EventsService {
     private readonly deliveryModel: typeof DeliveryModel,
   ) {}
 
-  async locationChanged(dto: LocationChangedEventDto, server: Server) {
+  async locationChanged(
+    dto: LocationChangedEventDto,
+    server: Server,
+    socket: Socket,
+  ) {
     const update = await this.deliveryModel
-      .findByIdAndUpdate(
-        dto.delivery_id,
+      .findOneAndUpdate(
+        { _id: dto.delivery_id, driver: (socket as any).user._id },
         { location: dto.location },
         { new: true },
       )
