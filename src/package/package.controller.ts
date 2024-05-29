@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AllowedRoles, Role } from 'common';
+import { AllowedRoles, Role, RoleGuard } from 'common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { User } from 'src/user';
@@ -22,18 +22,21 @@ export class PackageController {
   constructor(private readonly packageService: PackageService) {}
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Post('package')
   create(@Body() createPackageDto: CreatePackageDto) {
     return this.packageService.create(createPackageDto);
   }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Get('package')
   findAll() {
     return this.packageService.findAll();
   }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Get('package/:id')
   findOne(@Param('id') id: string) {
     return this.packageService.findOne(id);
@@ -50,12 +53,14 @@ export class PackageController {
   }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Patch('package/:id')
   update(@Param('id') id: string, @Body() updatePackageDto: UpdatePackageDto) {
     return this.packageService.update(id, updatePackageDto);
   }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Delete('package/:id')
   remove(@Param('id') id: string) {
     return this.packageService.remove(id);

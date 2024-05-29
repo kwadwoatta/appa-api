@@ -17,4 +17,11 @@ export class UserService {
     delete user.hash;
     return user;
   }
+
+  findAll() {
+    return this.userModel
+      .find()
+      .populate([{ path: 'packages' }])
+      .exec();
+  }
 }

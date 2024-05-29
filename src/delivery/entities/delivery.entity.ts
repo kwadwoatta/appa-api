@@ -14,6 +14,9 @@ export class Delivery {
   @Prop({ default: uuid, required: true, type: String })
   _id: string;
 
+  @Prop({ type: String })
+  name: string;
+
   @Prop({ default: Date.now, required: true, type: Date })
   createdAt: Date;
 

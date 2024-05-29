@@ -23,6 +23,9 @@ export class Package {
   @Prop({ type: String, default: uuid })
   _id: string;
 
+  @Prop({ type: String })
+  name: string;
+
   @IsOptional()
   @Prop({ type: Date, default: Date.now, required: true })
   createdAt: Date;

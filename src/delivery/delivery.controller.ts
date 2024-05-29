@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AllowedRoles, Role } from 'common';
+import { AllowedRoles, Role, RoleGuard } from 'common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { User } from 'src/user';
@@ -22,18 +22,21 @@ export class DeliveryController {
   constructor(private readonly deliveryService: DeliveryService) {}
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Post('delivery')
   create(@Body() createDeliveryDto: CreateDeliveryDto) {
     return this.deliveryService.create(createDeliveryDto);
   }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Get('delivery')
   findAll() {
     return this.deliveryService.findAll();
   }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Get('delivery/:deliveryId')
   findOne(@Param('deliveryId') deliveryId: string) {
     return this.deliveryService.findOne(deliveryId);
@@ -71,6 +74,7 @@ export class DeliveryController {
   // }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Patch('delivery/:deliveryId')
   update(
     @Param('deliveryId') deliveryId: string,
@@ -80,6 +84,7 @@ export class DeliveryController {
   }
 
   @AllowedRoles(Role.Admin)
+  @UseGuards(RoleGuard)
   @Delete('delivery/:deliveryId')
   remove(@Param('deliveryId') deliveryId: string) {
     return this.deliveryService.remove(deliveryId);
