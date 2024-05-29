@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsUUID } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 import { DeliveryStatus, Point } from 'common';
 import type { Document } from 'mongoose';
 import mongoose from 'mongoose';
@@ -14,8 +14,9 @@ export class Delivery {
   @Prop({ default: uuid, required: true, type: String })
   _id: string;
 
-  @Prop({ type: String })
-  name: string;
+  @IsString()
+  @Prop({ type: String, required: true })
+  description: string;
 
   @Prop({ default: Date.now, required: true, type: Date })
   createdAt: Date;
