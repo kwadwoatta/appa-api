@@ -29,7 +29,7 @@ import { WsAuthMiddleware } from './middleware/ws.middleware';
 @UseFilters(WebsocketExceptionsFilter)
 @UsePipes(new ValidationPipe({ transform: true }))
 @UseGuards(WsJwtGuard)
-@WebSocketGateway({ namespace: 'events' })
+@WebSocketGateway({ namespace: 'events', cors: true })
 export class EventsGateway implements OnGatewayInit {
   @WebSocketServer()
   server: Server;

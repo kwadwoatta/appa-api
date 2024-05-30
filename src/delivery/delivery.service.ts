@@ -53,6 +53,17 @@ export class DeliveryService {
       .find({
         driver: userId,
       })
+      .populate([
+        { path: 'package', select: '' },
+        {
+          path: 'driver',
+          select: '-hash -createdAt -updatedAt',
+        },
+        {
+          path: 'customer',
+          select: '-hash -createdAt -updatedAt -_id -email -role -packages',
+        },
+      ])
       .exec();
   }
 
