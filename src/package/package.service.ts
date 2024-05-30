@@ -44,6 +44,7 @@ export class PackageService {
         $or: [{ from_user: userId }, { to_user: userId }],
       })
       .populate([
+        { path: 'deliveries', select: '' },
         {
           path: 'from_user',
           select: '-hash -role -createdAt -updatedAt',
