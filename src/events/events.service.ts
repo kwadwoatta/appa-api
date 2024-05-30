@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { DeliveryStatus, WsEvents } from 'common';
 import { Server, Socket } from 'socket.io';
@@ -25,6 +25,10 @@ export class EventsService {
         { new: true },
       )
       .exec();
+
+    if (!update) {
+      throw new InternalServerErrorException();
+    }
 
     socket.to(dto.delivery_id).emit(WsEvents.LocationChanged, update.toJSON());
     socket.to(dto.delivery_id).emit(WsEvents.DeliveryUpdated, update.toJSON());
@@ -64,6 +68,10 @@ export class EventsService {
           },
         )
         .exec();
+
+      if (!update) {
+        throw new InternalServerErrorException();
+      }
 
       socket.to(dto.delivery_id).emit(WsEvents.StatusChanged, update.toJSON());
       socket
