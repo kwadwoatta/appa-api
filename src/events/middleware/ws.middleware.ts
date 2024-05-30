@@ -10,13 +10,16 @@ export const WsAuthMiddleware = (
 ): SocketMiddleware => {
   return async (socket, next) => {
     try {
-      // const token = socket.handshake?.auth?.token;
-      // if (!token) throw new UnauthorizedException();
+      let token = socket.handshake?.auth?.token;
 
       const { authorization } = socket.handshake.headers;
-      if (!authorization) throw new UnauthorizedException();
+      // if (!authorization) throw new UnauthorizedException();
+      if (authorization) {
+        token = authorization.split(' ')[1];
+      }
 
-      const token: string = authorization.split(' ')[1];
+      if (!token) throw new UnauthorizedException();
+
       const payload = verify(token, process.env.JWT_SECRET);
 
       const user = await userModel.findOne({ _id: payload.sub }).exec();

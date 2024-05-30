@@ -55,8 +55,11 @@ export class EventsGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage(WsEvents.StatusChanged)
-  statusChanged(@MessageBody() dto: StatusChangedEventDto) {
-    return this.eventsService.statusChanged(dto, this.server);
+  statusChanged(
+    @MessageBody() dto: StatusChangedEventDto,
+    @ConnectedSocket() socket,
+  ) {
+    return this.eventsService.statusChanged(dto, this.server, socket);
   }
 
   @SubscribeMessage(WsEvents.DeliveryUpdated)
@@ -67,15 +70,25 @@ export class EventsGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage(WsEvents.JoinDeliveryRoom)
-  async joinDeliveryRoom(
+  joinDeliveryRoom(
     @MessageBody() dto: JoinDeliveryRoomDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    if (await this.isAllowedToJoinRoom(dto.delivery_id, socket)) {
-      socket.join(dto.delivery_id);
-    } else {
-      socket.disconnect();
-    }
+    this.isAllowedToJoinRoom(dto.delivery_id, socket).then((allowed) => {
+      if (allowed) {
+        socket.join(dto.delivery_id);
+        socket.emit(
+          WsEvents.JoinDeliveryRoom,
+          JSON.parse(
+            JSON.stringify({
+              message: `You have been added to delivery room ${dto.delivery_id}`,
+            }),
+          ),
+        );
+      } else {
+        socket.disconnect();
+      }
+    });
   }
 
   @SubscribeMessage(WsEvents.LeaveDeliveryRoom)
@@ -99,7 +112,6 @@ export class EventsGateway implements OnGatewayInit {
     const delivery = await this.deliveryModel
       .findOne({ _id: roomID, $or: [{ driver: userId }, { customer: userId }] })
       .exec();
-
     return !!delivery;
   };
 }

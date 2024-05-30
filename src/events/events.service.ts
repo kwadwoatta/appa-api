@@ -26,10 +26,15 @@ export class EventsService {
       )
       .exec();
 
-    server.to(dto.delivery_id).emit(WsEvents.DeliveryUpdated, update.toJSON());
+    socket.to(dto.delivery_id).emit(WsEvents.LocationChanged, update.toJSON());
+    socket.to(dto.delivery_id).emit(WsEvents.DeliveryUpdated, update.toJSON());
   }
 
-  async statusChanged(dto: StatusChangedEventDto, server: Server) {
+  async statusChanged(
+    dto: StatusChangedEventDto,
+    server: Server,
+    socket: Socket,
+  ) {
     const statusUpdates = {
       [DeliveryStatus.PickedUp]: {
         status: DeliveryStatus.PickedUp,
@@ -51,12 +56,17 @@ export class EventsService {
 
     if (statusUpdates.hasOwnProperty(dto.status)) {
       const update = await this.deliveryModel
-        .findByIdAndUpdate(dto.delivery_id, statusUpdates[dto.status], {
-          new: true,
-        })
+        .findOneAndUpdate(
+          { _id: dto.delivery_id, driver: (socket as any).user._id },
+          statusUpdates[dto.status],
+          {
+            new: true,
+          },
+        )
         .exec();
 
-      server
+      socket.to(dto.delivery_id).emit(WsEvents.StatusChanged, update.toJSON());
+      socket
         .to(dto.delivery_id)
         .emit(WsEvents.DeliveryUpdated, update.toJSON());
     }
