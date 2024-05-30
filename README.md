@@ -34,11 +34,7 @@
     docker compose up -d
     ```
 
-7. seed the 3 users accounts
-
-    ```ts
-    pnpm tsx db/seed.ts 
-    ```
+7. import db/appa.user.json into mongodb
 
 8. start the app in development mode
 

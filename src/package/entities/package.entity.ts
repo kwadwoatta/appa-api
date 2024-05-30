@@ -84,7 +84,7 @@ export class Package {
 
   @ValidateNested({ each: true })
   @Type(() => Point)
-  @Prop(Point)
+  @Prop({ type: Point })
   to_location: Point;
 
   @IsUUID('4', { each: true })

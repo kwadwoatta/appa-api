@@ -1,0 +1,39 @@
+[{
+  "_id": "8f9e305e-f9dd-4482-966b-f8813d4fdcd1",
+  "email": "customer@gmail.com",
+  "hash": "$argon2id$v=19$m=65536,t=3,p=4$Wo1oNnl1qYvryzSsMVgB+w$zJ5k/UhoCTkqkb/Dz2ytbt9oJJPsAVUXU4zuoCTx05M",
+  "packages": [],
+  "createdAt": {
+    "$date": "2024-05-30T18:45:01.499Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T18:45:01.499Z"
+  },
+  "__v": 0
+},
+{
+  "_id": "e31cc31d-99fb-4b05-9bfb-3e5c9905676d",
+  "email": "driver@gmail.com",
+  "hash": "$argon2id$v=19$m=65536,t=3,p=4$wWEOyUMJit6DkMx5v35dBA$PPpp/eElLXFTU71q3WZhCpbBsGmWWuknQr51lXghZGA",
+  "packages": [],
+  "createdAt": {
+    "$date": "2024-05-30T18:46:22.857Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T18:46:22.857Z"
+  },
+  "__v": 0
+},
+{
+  "_id": "c09266a1-3abb-4b3b-a624-54a585688af9",
+  "email": "admin@gmail.com",
+  "hash": "$argon2id$v=19$m=65536,t=3,p=4$kVJIvq4Zy8aHnQo4lupDvA$86n1MehhN0R81kX5KXS/N2rzQe6sJ9FB3eAJ3JJfyQs",
+  "packages": [],
+  "createdAt": {
+    "$date": "2024-05-30T18:46:59.154Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-30T18:46:59.154Z"
+  },
+  "__v": 0
+}]
