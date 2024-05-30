@@ -6,46 +6,63 @@
 
 ## Installation
 
-```bash
-$ pnpm install
-```
+1. clone the repo
 
-## Running the app
+    ```bash
+    git clone https://github.com/kwadwoatta/appa-api.git
+    ```
 
-```bash
-# development
-$ pnpm run start
+2. cd into the repo
 
-# watch mode
-$ pnpm run start:dev
+    ```bash
+    cd appa-api
+    ```
 
-# production mode
-$ pnpm run start:prod
-```
+3. copy .env.example to .env and fill them out
 
-## Test
+4. install all dependencies
 
-```bash
-# unit tests
-$ pnpm run test
+    ```bash
+    pnpm install
+    ```
 
-# e2e tests
-$ pnpm run test:e2e
+5. [download docker](https://www.docker.com/products/docker-desktop/)
 
-# test coverage
-$ pnpm run test:cov
-```
+6. start the mongodb (database) service
 
-## Support
+    ```bash
+    docker compose up -d
+    ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+7. seed the 3 users accounts
 
-## Stay in touch
+    ```ts
+    pnpm tsx db/seed.ts 
+    ```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+8. start the app in development mode
 
-## License
+    ```bash
+    pnpm start:dev
+    ```
 
-Nest is [MIT licensed](LICENSE).
+9. visit url in Postman
+
+    ```bash
+    http://localhost:3000/api/
+    ```
+
+10. login with one of the seeded users
+
+    ```ts
+    {
+        "email": "customer@gmail.com",
+        "password": "password"
+    }
+    ```
+
+11. copy access token and set as authorization header for subsequent requests
+
+    ```graphql
+    Authorization: Bearer {your access token}
+    ```
