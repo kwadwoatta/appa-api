@@ -34,13 +34,13 @@
     docker compose up -d
     ```
 
-7. import db/appa.user.json into mongodb
-
-8. start the app in development mode
+7. start the app in development mode
 
     ```bash
     pnpm start:dev
     ```
+
+8. import db/appa.user.json into mongodb
 
 9. visit url in Postman
 
