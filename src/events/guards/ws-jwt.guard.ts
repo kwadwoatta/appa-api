@@ -23,18 +23,23 @@ export class WsJwtGuard implements CanActivate {
     return true;
   }
 
-  static async validateToken(client: Socket) {
-    const { authorization } = client.handshake.headers;
-    if (!authorization) throw new UnauthorizedException();
+  static async validateToken(socket: Socket) {
+    let token = socket.handshake?.auth?.token;
+    const { authorization } = socket.handshake.headers;
 
-    const token: string = authorization.split(' ')[1];
+    if (authorization) {
+      token = authorization.split(' ')[1];
+    }
+
+    if (!token) throw new UnauthorizedException();
+
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     await mongoose.connect(process.env.DB_URL);
 
     const user = await UserModel.findOne({ _id: payload.sub }).exec();
     if (!user) throw new UnauthorizedException();
 
-    client = Object.assign(client, {
+    socket = Object.assign(socket, {
       user: user,
     });
   }

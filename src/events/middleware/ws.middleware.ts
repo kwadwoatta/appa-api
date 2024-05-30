@@ -11,10 +11,9 @@ export const WsAuthMiddleware = (
   return async (socket, next) => {
     try {
       let token = socket.handshake?.auth?.token;
-
       const { authorization } = socket.handshake.headers;
-      // if (!authorization) throw new UnauthorizedException();
-      if (authorization) {
+
+      if (!token && authorization) {
         token = authorization.split(' ')[1];
       }
 
