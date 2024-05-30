@@ -48,7 +48,7 @@ export class DeliveryService {
   async findAllForUser(userId: string) {
     return this.deliveryModel
       .find({
-        driver: userId,
+        $or: [{ driver: userId }, { customer: userId }],
       })
       .populate([
         { path: 'package', select: '' },
